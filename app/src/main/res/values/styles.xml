@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.AirlinePedia.Light" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name ="colorPrimary">@color/light_blue</item>
+        <item name ="android:textColorPrimary">@color/white</item>
+
+    </style>
+
+    <style name="Theme.AirlinePedia.Dark" parent ="Theme.AppCompat">
+        <item name="colorPrimary">@color/black</item>
+        <item name ="android:textColorPrimary">@color/white</item>
+    </style>
+
+    <style name="FullscreenDialogTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+</resources>

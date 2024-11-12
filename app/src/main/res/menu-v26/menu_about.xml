@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<!--    <item-->
+<!--        android:id="@+id/action_share"-->
+<!--        android:title="@string/share"-->
+<!--        android:icon="@drawable/baseline_share_24"-->
+<!--        app:showAsAction="ifRoom"-->
+<!--/>-->
+
+  <item
+      android:id="@+id/action_search"
+      android:icon="@drawable/baseline_search_24"
+      android:iconTint="@color/iconColor"
+      android:title="@string/search"
+      android:actionViewClass="android.widget.SearchView"
+      app:showAsAction="collapseActionView|ifRoom" />
+
+    <item
+        android:color="@color/black"
+        android:id="@+id/action_about"
+        android:title="@string/about" />
+
+    <item
+        android:id="@+id/action_sort"
+        android:title="@string/sort"
+        />
+
+</menu>

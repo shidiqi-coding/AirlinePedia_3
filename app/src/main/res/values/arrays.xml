@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="theme_option">
+    <item>Light</item>
+    <item>Dark</item>
+    <item>Follow System</item>
+    </string-array>
+
+    <string-array name="theme_values">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Follow System</item>
+    </string-array>
+    <string-array name="default_plane_image">default_plane_image</string-array>
+
+    <array name="airfrance_planes">
+        <item>@drawable/air_france_a318</item>
+        <item>@drawable/air_france_a320</item>
+        <item>@drawable/air_france_b777</item>
+    </array>
+
+    <!-- You can add more arrays for other airlines -->
+    <array name="airasia_planes">
+        <item>@drawable/airasia_a320</item>
+        <item>@drawable/airasia_a320_251</item>
+        <item>@drawable/airasia_b737</item>
+    </array>
+</resources>

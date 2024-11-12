@@ -1,0 +1,17 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.AirlinePedia" parent="Theme.MaterialComponents.DayNight">
+        <!-- Customize your dark theme here. -->
+
+        <item name ="colorOnPrimary">@color/white</item>
+        <item name ="android:textColorPrimary">@color/light_blue</item>
+
+    </style>
+
+    <style name="Theme.AirlinePedia.Splash" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/splash_screen_background</item>
+        <item name ="android:textColorPrimary">@color/white</item>
+
+
+    </style>
+</resources>

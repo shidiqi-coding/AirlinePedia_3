@@ -1,0 +1,29 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.AirlinePedia" parent="Theme.MaterialComponents.DayNight">
+        <!-- Customize your light theme here. -->
+        <item name="android:statusBarColor">@color/black_transparent</item>
+        <item name="colorOnPrimary">@color/black</item>
+
+        <item name ="colorPrimary">@color/white</item>
+        <item name ="android:textColorPrimary">@color/light_blue</item>
+        <item name="android:textColor">@color/black</item>
+
+<!--        <item name ="icon">@drawable/airline_pedia_start_to_end</item>-->
+    </style>
+
+    <style name="Theme.AirlinePedia.Splash" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/splash_screen_background</item>
+
+
+    </style>
+
+<!--    </style>-->
+
+<!--    <style name ="ToolBarStyle" parent="Widget.AppCompat.Toolbar">-->
+<!--        <item name = "android:background">@color/blue</item>-->
+
+<!--    </style>-->
+
+<!--    <style name="Theme.AirlinePedia" parent="Base.Theme.AirlinePedia" />-->
+</resources>
