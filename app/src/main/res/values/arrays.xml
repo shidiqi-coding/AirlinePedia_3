@@ -25,4 +25,71 @@
         <item>@drawable/airasia_a320_251</item>
         <item>@drawable/airasia_b737</item>
     </array>
+
+    <array name ="ana_planes">
+        <item>@drawable/all_nippon_airways_b777</item>
+        <item>@drawable/all_nippon_airways_a320</item>
+        <item>@drawable/all_nippon_airways_b787</item>
+    </array>
+    <array name="batik_planes">
+        <item>@drawable/batik_air_a320</item>
+    </array>
+
+    <array name="british_planes">
+        <item>@drawable/british_airways_a320</item>
+        <item>@drawable/british_airways_a350</item>
+        <item>@drawable/british_airways_b787</item>
+    </array>
+
+    <array name ="lion_planes">
+        <item>@drawable/lion_air_b737</item>
+        <item>@drawable/lion_air_b747</item>
+    </array>
+
+    <array name="emirates_planes">
+        <item>@drawable/emirates_airlines_a380</item>
+        <item>@drawable/emirates_b777</item>
+    </array>
+
+    <array name="etihad_planes">
+        <item>@drawable/etihad_airways_b787</item>
+        <item>@drawable/etihad_airways_a380</item>
+    </array>
+
+    <array name ="garuda_planes">
+        <item>@drawable/garuda_indonesia_b737</item>
+        <item>@drawable/garuda_indonesia_b747</item>
+        <item>@drawable/garuda_indonesia_b777</item>
+    </array>
+
+    <array name ="korean_planes">
+        <item>@drawable/korean_air_b777</item>
+    </array>
+
+    <array name="lufthansa_planes">
+        <item>@drawable/lufthansa_a350</item>
+    </array>
+
+    <array name="qantas_planes">
+        <item>@drawable/qantas_a380</item>
+        <item>@drawable/qantas_b737</item>
+    </array>
+
+    <array name ="qatar_planes">
+        <item>@drawable/qatar_airways_b777</item>
+        <item>@drawable/qatar_airways_b787</item>
+
+    </array>
+
+<array name ="singapore_planes">
+    <item>@drawable/singapore_airlines_b777</item>
+    <item>@drawable/singapore_airlines_b787</item>
+    <item>@drawable/singapore_airlines_a380</item>
+</array>
+
+    <array name ="turkish_planes">
+       <item>@drawable/turkish_airlines_a330</item>
+        <item>@drawable/turkish_airlines_b777</item>
+    </array>
+
 </resources>

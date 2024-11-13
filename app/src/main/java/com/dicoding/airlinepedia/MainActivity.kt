@@ -5,19 +5,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.recyclerviewapp.aircraft
+//import java.util.Locale.filter
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
 
     private lateinit var rvAirline: RecyclerView
     private lateinit var listAdapter: ListAircraftAdapter
-    private val originalList = ArrayList<aircraft>()
-    private val filteredList = ArrayList<aircraft>()
+    private var originalList = ArrayList<aircraft>()
+    //private val filteredList = ArrayList<aircraft>()
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint("MissingInflatedId", "NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -25,45 +29,91 @@ class MainActivity : AppCompatActivity() {
         rvAirline = findViewById(R.id.rv_Airline)
         rvAirline.setHasFixedSize(true)
 
-        originalList.addAll(getListAirline())
-        filteredList.addAll(getListAirline()) // Isi awal list dengan data dari getListAirline()
 
-        listAdapter = ListAircraftAdapter(filteredList)
+        originalList= ArrayList()
+
+        listAdapter = ListAircraftAdapter(originalList)
+
+
+        originalList.addAll(getListAirline())
+      //  filteredList.addAll(getListAirline()) // Isi awal list dengan data dari getListAirline()
+
+       // listAdapter = ListAircraftAdapter(filteredList)
         rvAirline.layoutManager = LinearLayoutManager(this)
         rvAirline.adapter = listAdapter
+
+        originalList.add(aircraft(name = "Air France",
+            description = "One of the leading airlines in Europe.",
+            history = "Founded in 1933, Air France is a major airline with a rich history.",
+            meaningOfLogo = "The logo represents the elegance and excellence of France.",
+            aircraftType = "Boeing 777, Airbus A320",
+            photo = R.drawable.air_france, // Resource ID for the aircraft image
+            logo = R.drawable.air_france_logo ))
+
+        listAdapter.notifyDataSetChanged()
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_about, menu)
+     //   menuInflater.inflate(R.menu.search_menu, menu)
 
+
+//        val inflater = menuInflater
+//        inflater.inflate(R.menu.menu_about, menu)
         val searchItem = menu?.findItem(R.id.action_search)
-        val searchView = searchItem?.actionView as? androidx.appcompat.widget.SearchView
+        val searchView: SearchView = searchItem?.getActionView() as SearchView
 
-        searchView?.queryHint = "Search airlines..."
 
-        searchView?.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let { searchInList(it) }
-                return true
+//        searchView?.queryHint = "Search airlines..."
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return false
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let { searchInList(it) }
-                return true
+            override fun onQueryTextChange(msg: String?): Boolean {
+
+               filter(msg.orEmpty())
+                return false
             }
-        })
+//                newText?.let { searchInList(it) }
+
+            })
+
+
+
         return true
+
+
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun searchInList(query: String) {
-        val filteredResults = getListAirline().filter {
-            it.name.contains(query, ignoreCase = true)
+    private fun filter(text:String){
+        val filteredList: ArrayList<aircraft> = ArrayList()
+
+        for (item in originalList){
+            if(item.name.toLowerCase().contains(text.toLowerCase())){
+
+                filteredList.add(item)
+            }
         }
-        filteredList.clear()
-        filteredList.addAll(filteredResults)
-        listAdapter.notifyDataSetChanged()
+        if(filteredList.isEmpty()){
+            Toast.makeText(this,"No data Found..", Toast.LENGTH_SHORT).show()
+        }else{
+            listAdapter.filterList(filteredList)
+        }
     }
+
+    //@SuppressLint("NotifyDataSetChanged")
+//    private fun searchInList(query: String) {
+//        val filteredResults = getListAirline().filter {
+//            it.name.contains(query, ignoreCase = true)
+//        }
+//        filteredList.clear()
+//        filteredList.addAll(filteredResults)
+//        listAdapter.notifyDataSetChanged()
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -72,27 +122,27 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 true
             }
-            R.id.action_sort_ascending -> {
-               listAdapter.sortListByName()
-                true
-            }
-            R.id.action_sort_descending -> {
-                listAdapter.sortListByNameDescending()
-                true
-            }
+//            R.id.action_sort_ascending -> {
+//               listAdapter.sortListByName()
+//                true
+//            }
+//            R.id.action_sort_descending -> {
+//                listAdapter.sortListByNameDescending()
+//                true
+//            }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun sortListByName() {
-        filteredList.sortBy { it.name } // Urutkan list secara ascending berdasarkan nama
-        listAdapter.updateList(filteredList) // Perbarui adapter dengan data baru
-    }
-
-    private fun sortListByNameDescending() {
-        filteredList.sortByDescending { it.name } // Urutkan list secara descending berdasarkan nama
-        listAdapter.updateList(filteredList)
-    }
+//    private fun sortListByName() {
+//        filteredList.sortBy { it.name } // Urutkan list secara ascending berdasarkan nama
+//        listAdapter.updateList(filteredList) // Perbarui adapter dengan data baru
+//    }
+//
+//    private fun sortListByNameDescending() {
+//        filteredList.sortByDescending { it.name } // Urutkan list secara descending berdasarkan nama
+//        listAdapter.updateList(filteredList)
+//    }
 
     @SuppressLint("Recycle")
     private fun getListAirline(): ArrayList<aircraft> {

@@ -1,5 +1,6 @@
 package com.dicoding.airlinepedia
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Build
 import android.net.Uri
@@ -13,6 +14,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 //import android.os.Handler
 //import android.os.Looper
@@ -29,25 +31,19 @@ class DetailAirlineActivity : AppCompatActivity() {
 //    private var imageIndex = 0
     private var currentImages: List<Int> = emptyList()
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_airline)
 
-    val airlineName = intent.getStringExtra("airline_name") ?: "Air France"
-        Log.d("DetailAirlineActivity", "airlineName: $airlineName")
+//    val airlineNames = intent.getStringExtra("key_airline") ?: "Air France"
+//        Log.d("DetailAirlineActivity", "airlineName: $airlineNames")
        // Default
 //      val ivAircraft: ImageView = findViewById(R.id.iv_aircraft)
 
-        // Get the images based on the airline name
-        currentImages = getAircraftImages(airlineName)
 
-        // Set up RecyclerView for gallery
-        val recyclerView: RecyclerView = findViewById(R.id.rv_gallery)
-        recyclerView.layoutManager = GridLayoutManager(this, 3) // 3 columns for the grid
-        recyclerView.adapter = GalleryAdapter(this, currentImages) { imageResId ->
-            // Show the image in full screen when clicked
-            showFullScreenImage(imageResId)
-        }
+
 
         // Share button setup
         val shareButton: ImageButton = findViewById(R.id.btn_share)
@@ -62,11 +58,22 @@ class DetailAirlineActivity : AppCompatActivity() {
         }
 
         // Retrieve the airline data from the intent
-        val dataAirline = if (Build.VERSION.SDK_INT >= 33) {
+        val dataAirline = if (Build.VERSION.SDK_INT < 30) {
             intent.getParcelableExtra<aircraft>(key_airline, aircraft::class.java)
         } else {
             @Suppress("DEPRECATION")
             intent.getParcelableExtra<aircraft>(key_airline)
+        }
+        // Get the images based on the airline name
+        val airlineName = dataAirline?.name
+        currentImages = getAircraftImages(airlineName)
+
+        // Set up RecyclerView for gallery
+        val recyclerView: RecyclerView = findViewById(R.id.rv_gallery)
+        recyclerView.layoutManager = GridLayoutManager(this, 3) // 3 columns for the grid
+        recyclerView.adapter = GalleryAdapter(this, currentImages) { imageResId ->
+            // Show the image in full screen when clicked
+            showFullScreenImage(imageResId)
         }
 
         // Set airline details on the UI
@@ -93,7 +100,20 @@ class DetailAirlineActivity : AppCompatActivity() {
         val airlineImagesMap = mapOf(
             "Air France" to R.array.airfrance_planes,
             "Air Asia" to R.array.airasia_planes,
-//            "British Airways" to R.array.british_airways_planes,  // New airline
+            "All Nippon Airways (ANA)" to R.array.ana_planes,
+            "Batik Air" to R.array.batik_planes,
+            "British Airways" to R.array.british_planes,  // New airline
+            "Lion Air" to R.array.lion_planes,
+            "Emirates Airlines" to R.array.emirates_planes,
+            "Etihad Airways" to R.array.etihad_planes,
+            "Garuda Indonesia" to R.array.garuda_planes,
+            "Korean Air" to R.array.korean_planes,
+            "Lufthansa" to R.array.lufthansa_planes,
+            "Qantas" to R.array.qantas_planes,
+            "Qatar Airways" to R.array.qatar_planes,
+            "Singapore Airlines" to R.array.singapore_planes,
+            "Turkish Airlines" to R.array.turkish_planes
+
 //            "Emirates" to R.array.emirates_planes  // New airline
         )
 
