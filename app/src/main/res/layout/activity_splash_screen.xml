@@ -1,57 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animationCache="false"
     android:background="@color/splash_screen_background"
     tools:context=".SplashScreenActivity">
 
+    <!-- Logo -->
+
+    <!-- LinearLayout untuk TextView dan Gambar -->
 
     <ImageView
+        android:id="@+id/logoImage"
         android:layout_width="200dp"
-
-
         android:layout_height="150dp"
-        android:layout_marginTop="276dp"
+        android:layout_marginTop="244dp"
         android:src="@drawable/airline_pedia_icon"
-        app:layout_constraintBaseline_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@null" />
 
-
-    
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="40dp"
-        tools:ignore="MissingConstraints">
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="40dp">
 
+        <!-- TextView -->
         <TextView
             android:id="@+id/textView"
-            android:layout_width="50dp"
-            android:layout_height="3dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/from"
+            android:textColor="@color/text_splash_color"
             android:textSize="16sp"
-            android:textColor="@color/text_splash_color" />
+            android:gravity="center" />
 
-    <ImageView
-        android:id="@+id/parent_company"
-        android:layout_width="282dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="660dp"
-        app:srcCompat="@drawable/shidiqi_ihsan"
-        tools:ignore="MissingConstraints" />
+        <!-- ImageView -->
+        <ImageView
+            android:id="@+id/parent_company"
+            android:layout_width="200dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/shidiqi_ihsan" />
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,7 @@ package com.dicoding.airlinepedia
 //import android.annotation.SuppressLint
 //import android.annotation.SuppressLint
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.ViewGroup
 import android.view.View
 import android.view.LayoutInflater
@@ -70,11 +71,11 @@ class ListAircraftAdapter(private var listAirline: ArrayList<aircraft>) : Recycl
 
 
 
-//        holder.itemView.setOnClickListener {
-//            val intentDetail = Intent(holder.itemView.context, DetailAirlineActivity::class.java)
-//            intentDetail.putExtra("key_airline", listAirline[holder.adapterPosition])
-//            holder.itemView.context.startActivity(intentDetail)
-//        }
+        holder.itemView.setOnClickListener {
+            val intentDetail = Intent(holder.itemView.context, DetailAirlineActivity::class.java)
+            intentDetail.putExtra("key_airline", listAirline[holder.adapterPosition])
+            holder.itemView.context.startActivity(intentDetail)
+        }
     }
 
     override fun getItemCount(): Int = listAirline.size

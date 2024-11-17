@@ -11,6 +11,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.recyclerviewapp.aircraft
+import java.util.Locale
+
 //import java.util.Locale.filter
 
 @Suppress("DEPRECATION")
@@ -26,29 +28,29 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        originalList= ArrayList()
+        originalList.addAll(getListAirline())
+        listAdapter = ListAircraftAdapter(originalList)
+
         rvAirline = findViewById(R.id.rv_Airline)
         rvAirline.setHasFixedSize(true)
 
 
-        originalList= ArrayList()
 
-        listAdapter = ListAircraftAdapter(originalList)
-
-
-        originalList.addAll(getListAirline())
       //  filteredList.addAll(getListAirline()) // Isi awal list dengan data dari getListAirline()
 
        // listAdapter = ListAircraftAdapter(filteredList)
         rvAirline.layoutManager = LinearLayoutManager(this)
         rvAirline.adapter = listAdapter
 
-        originalList.add(aircraft(name = "Air France",
-            description = "One of the leading airlines in Europe.",
-            history = "Founded in 1933, Air France is a major airline with a rich history.",
-            meaningOfLogo = "The logo represents the elegance and excellence of France.",
-            aircraftType = "Boeing 777, Airbus A320",
-            photo = R.drawable.air_france, // Resource ID for the aircraft image
-            logo = R.drawable.air_france_logo ))
+//        originalList.add(aircraft(name = "Air France",
+//            description = "One of the leading airlines in Europe.",
+//            history = "Founded in 1933, Air France is a major airline with a rich history.",
+//            meaningOfLogo = "The logo represents the elegance and excellence of France.",
+//            aircraftType = "Boeing 777, Airbus A320",
+//            photo = R.drawable.air_france, // Resource ID for the aircraft image
+//            logo = R.drawable.air_france_logo ))
 
         listAdapter.notifyDataSetChanged()
 
@@ -57,54 +59,58 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_about, menu)
-     //   menuInflater.inflate(R.menu.search_menu, menu)
 
 
 //        val inflater = menuInflater
 //        inflater.inflate(R.menu.menu_about, menu)
         val searchItem = menu?.findItem(R.id.action_search)
-        val searchView: SearchView = searchItem?.getActionView() as SearchView
+       val searchView: SearchView = searchItem?.getActionView() as SearchView
 
 
 //        searchView?.queryHint = "Search airlines..."
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(p0: String?): Boolean {
+            override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
 
-            override fun onQueryTextChange(msg: String?): Boolean {
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText.isNullOrEmpty()) {
+                    originalList.clear()
+                    originalList.addAll(getListAirline())
+                    listAdapter.filterList(ArrayList(originalList))
+                } else {
+                    filter(newText)
+                }
 
-               filter(msg.orEmpty())
-                return false
-            }
 //                newText?.let { searchInList(it) }
+            return true
+                }
 
-            })
 
 
+        })
 
         return true
 
 
     }
 
-    private fun filter(text:String){
-        val filteredList: ArrayList<aircraft> = ArrayList()
+    private fun filter(text: String) {
+        val filteredList = ArrayList<aircraft>()
 
-        for (item in originalList){
-            if(item.name.toLowerCase().contains(text.toLowerCase())){
-
+        for (item in originalList) {
+            if (item.name.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))) {
                 filteredList.add(item)
             }
         }
-        if(filteredList.isEmpty()){
-            Toast.makeText(this,"No data Found..", Toast.LENGTH_SHORT).show()
-        }else{
+
+        if (filteredList.isEmpty()) {
+            Toast.makeText(this, "No data found.", Toast.LENGTH_SHORT).show()
+        } else {
             listAdapter.filterList(filteredList)
         }
     }
-
     //@SuppressLint("NotifyDataSetChanged")
 //    private fun searchInList(query: String) {
 //        val filteredResults = getListAirline().filter {

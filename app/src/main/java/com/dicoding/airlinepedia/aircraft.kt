@@ -13,6 +13,11 @@ data class aircraft (
     val history: String,
     val meaningOfLogo: String,
     val aircraftType: String,
+//    val country: String,
+//    val founded:String,
+//    val startOperating:String,
+//    val owner: String,
+//    val aircraft: Int,
     val photo: Int,
     val logo: Int
 

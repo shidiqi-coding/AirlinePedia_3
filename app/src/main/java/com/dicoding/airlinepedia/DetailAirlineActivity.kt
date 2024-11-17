@@ -3,7 +3,7 @@ package com.dicoding.airlinepedia
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Build
-import android.net.Uri
+//import android.net.Uri
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.ImageView
@@ -12,14 +12,18 @@ import com.dicoding.recyclerviewapp.aircraft
 import java.io.File
 import android.content.Intent
 import android.graphics.Bitmap
+//import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+//import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.FileProvider
 //import android.os.Handler
 //import android.os.Looper
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.io.FileOutputStream
 
 class DetailAirlineActivity : AppCompatActivity() {
 
@@ -32,7 +36,7 @@ class DetailAirlineActivity : AppCompatActivity() {
     private var currentImages: List<Int> = emptyList()
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    @SuppressLint("SuspiciousIndentation")
+    @SuppressLint("SuspiciousIndentation", "CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_airline)
@@ -44,11 +48,16 @@ class DetailAirlineActivity : AppCompatActivity() {
 
 
 
-
-        // Share button setup
         val shareButton: ImageButton = findViewById(R.id.btn_share)
+        val imageView: ImageView = findViewById(R.id.iv_detail_photo)
+        // Share button setup
+//        val shareButton: ImageButton = findViewById(R.id.btn_share)
+//        shareButton.setOnClickListener {
+//            shareImage()
+//        }
+
         shareButton.setOnClickListener {
-            shareImage()
+            shareImage(imageView)
         }
 
         // Back arrow setup
@@ -70,7 +79,7 @@ class DetailAirlineActivity : AppCompatActivity() {
 
         // Set up RecyclerView for gallery
         val recyclerView: RecyclerView = findViewById(R.id.rv_gallery)
-        recyclerView.layoutManager = GridLayoutManager(this, 3) // 3 columns for the grid
+        recyclerView.layoutManager = GridLayoutManager(this, 2) // 3 columns for the grid
         recyclerView.adapter = GalleryAdapter(this, currentImages) { imageResId ->
             // Show the image in full screen when clicked
             showFullScreenImage(imageResId)
@@ -85,6 +94,7 @@ class DetailAirlineActivity : AppCompatActivity() {
         val tvDetailMeaningOfLogo: TextView = findViewById(R.id.tv_detail_meaningOfLogo)
         val tvDetailaircraftType: TextView = findViewById(R.id.tv_detail_aircraftType)
 
+
         tvDetailName.text = dataAirline?.name
         tvDetailDescription.text = dataAirline?.description
         tvDetailHistory.text = dataAirline?.history
@@ -93,13 +103,21 @@ class DetailAirlineActivity : AppCompatActivity() {
         tvDetailMeaningOfLogo.text = dataAirline?.meaningOfLogo
         tvDetailaircraftType.text = dataAirline?.aircraftType
 
+//        val tvShortDescription: TextView = findViewById(R.id.tv_short_description)
+//        val shortDescription = """
+//    Name: ${dataAirline?.name}
+//    Country: ${dataAirline?.country ?: "Unknown"}
+//    founded: ${dataAirline?.founded ?: 0} aircraft
+//""".trimIndent()
+//        tvShortDescription.text = shortDescription
+
         supportActionBar?.hide()
     }
 
     private fun getAircraftImages(airlineName: String?): List<Int> {
         val airlineImagesMap = mapOf(
-            "Air France" to R.array.airfrance_planes,
-            "Air Asia" to R.array.airasia_planes,
+            "AirFrance" to R.array.airfrance_planes,
+            "AirAsia" to R.array.airasia_planes,
             "All Nippon Airways (ANA)" to R.array.ana_planes,
             "Batik Air" to R.array.batik_planes,
             "British Airways" to R.array.british_planes,  // New airline
@@ -133,6 +151,8 @@ class DetailAirlineActivity : AppCompatActivity() {
         return images.ifEmpty { listOf(R.drawable.default_aircraft_image) }
     }
 
+
+
 //    private fun getAircraftImages(airlineName: String?): List<Int> {
 //        val typedArray = when mapOf{
 //            "Air France" -> R.array.airfrance_planes,
@@ -160,25 +180,64 @@ class DetailAirlineActivity : AppCompatActivity() {
         dialog.show(supportFragmentManager, "FullScreenImage")
     }
 
-    private fun shareImage() {
-        val imageView = findViewById<ImageView>(R.id.iv_detail_photo)
-        val bitmap = (imageView.drawable as BitmapDrawable).bitmap
-        val uri = getImageUriFromBitmap(bitmap)
+    private fun shareImage(imageView: ImageView) {
+        try {
+            // Convert drawable from ImageView to bitmap
+            val drawable = imageView.drawable
+            if (drawable == null || drawable !is BitmapDrawable) {
+                Toast.makeText(this, "No image available to share", Toast.LENGTH_SHORT).show()
+                return
+            }
+            val bitmap = drawable.bitmap
 
-        val shareIntent = Intent(Intent.ACTION_SEND).apply {
-            type = "image/png"
-            putExtra(Intent.EXTRA_STREAM, uri)
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            // Save bitmap to cache directory
+            val cachePath = File(cacheDir, "images")
+            cachePath.mkdirs() // Buat folder jika belum ada
+            val file = File(cachePath, "shared_image.jpg")
+            FileOutputStream(file).use { out ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+            }
+
+            // Create URI using FileProvider
+            val imageUri = FileProvider.getUriForFile(
+                this,
+                "${packageName}.fileprovider",
+                file
+            )
+
+            // Buat Intent untuk berbagi gambar
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "image/*"
+                putExtra(Intent.EXTRA_STREAM, imageUri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+
+            // Tampilkan chooser
+            startActivity(Intent.createChooser(shareIntent, "Share Image"))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Failed to share image", Toast.LENGTH_SHORT).show()
         }
-        startActivity(Intent.createChooser(shareIntent, "Share via"))
     }
 
-    private fun getImageUriFromBitmap(bitmap: Bitmap): Uri {
-        val file = File(cacheDir, "share_image.png")
-        file.outputStream().use {
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
-            it.flush()
-        }
-        return FileProvider.getUriForFile(this, "${packageName}.provider", file)
-    }
+//    val shareButton: ImageButton = findViewById(R.id.btn_share) // Pastikan dalam fragment gunakan `view`
+//    val imageView: ImageView = findViewById(R.id.iv_detail_photo)
+
+
+//    private fun getImageUriFromBitmap(bitmap: Bitmap): Uri? {
+//        return try {
+//            // Buat file sementara di cache
+//            val file = File(cacheDir, "share_image.png")
+//            file.outputStream().use {
+//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+//                it.flush()
+//            }
+//
+//            // Gunakan FileProvider untuk mendapatkan URI
+//            FileProvider.getUriForFile(this, "${packageName}.provider", file)
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            null
+//        }
+//    }
 }

@@ -46,6 +46,12 @@ android {
 
 }
 
+//repositories {
+//    google()
+//    mavenCentral()  // Pastikan ini ada
+//    jcenter()
+//}
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -57,5 +63,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("de.hdodenhof:circleimageview:3.1.0")
+//    implementation ("com.github.chrisbanes:photoview:2.4.0")
+//    implementation (com.github.chrisbanes:PhotoView:2.3.0')
 }
 

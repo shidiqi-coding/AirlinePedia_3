@@ -4,6 +4,7 @@
     <color name="share_icon_color">#FFFFFF</color>
     <color name="text_splash_color">#FFFFFF</color>
     <color name="iconColor">#FFFFFF</color>
+    <color name ="search_icon_color">#FFFFFF</color>
     <color name="splash_screen_background">#000000</color>
 
 </resources>

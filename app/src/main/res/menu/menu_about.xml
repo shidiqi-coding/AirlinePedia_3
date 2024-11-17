@@ -19,26 +19,26 @@
         android:title="@string/about"
         app:showAsAction="never"/>
 
-  <item
-      android:id="@+id/action_sort_ascending"
-      android:icon="@drawable/baseline_sort_descending_24"
-      android:orderInCategory="1"
-      android:title="@string/sort"
-      android:visibility="visible"
-      app:showAsAction="always" />
+<!--  <item-->
+<!--      android:id="@+id/action_sort_ascending"-->
+<!--      android:icon="@drawable/baseline_sort_descending_24"-->
+<!--      android:orderInCategory="1"-->
+<!--      android:title="@string/sort"-->
+<!--      android:visibility="visible"-->
+<!--      app:showAsAction="always" />-->
 
-  <item
-      android:id="@+id/action_sort_descending"
-      android:icon="@drawable/baseline_sort_descending_24"
-      android:orderInCategory="2"
-      android:title="@string/sort_descending"
-      android:visibility="visible"
-      app:showAsAction="always" />
-  <item
-      android:id="@+id/action_settings"
-      android:title="@string/settings"
-      app:showAsAction="never"
-      tools:visibility="visible" />
+<!--  <item-->
+<!--      android:id="@+id/action_sort_descending"-->
+<!--      android:icon="@drawable/baseline_sort_descending_24"-->
+<!--      android:orderInCategory="2"-->
+<!--      android:title="@string/sort_descending"-->
+<!--      android:visibility="visible"-->
+<!--      app:showAsAction="always" />-->
+<!--  <item-->
+<!--      android:id="@+id/action_settings"-->
+<!--      android:title="@string/settings"-->
+<!--      app:showAsAction="never"-->
+<!--      tools:visibility="visible" />-->
 
 
 </menu>

@@ -4,14 +4,16 @@ import com.dicoding.airlinepedia.R
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
+//import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.view.ViewGroup
 import android.view.View
 import android.view.LayoutInflater
 import android.widget.ImageButton
 import android.widget.Toast
 import android.widget.ImageView
+import androidx.core.content.FileProvider
 //import androidx.core.content.ContentProviderCompat.requireContext
 //import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.DialogFragment
@@ -82,30 +84,60 @@ class FullScreenImageDialogFragment : DialogFragment() {
     }
 
     private fun shareImage(imageResId: Int) {
-        val bitmap = BitmapFactory.decodeResource(resources, imageResId)
-        val file = File(requireContext().cacheDir, "shared_image.jpg")
-        FileOutputStream(file).use { out ->
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
-        }
-        // Assuming the image is in the drawable folder
-        val imageUri = Uri.parse("android.resource://${requireContext().packageName}/drawable/$imageResId")
-        val shareIntent = Intent(Intent.ACTION_SEND).apply {
-            type = "image/*"
-            putExtra(Intent.EXTRA_STREAM, imageUri)
-//            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        }
-        startActivity(Intent.createChooser(shareIntent, "Share Image"))
-
-    }
-
-    private fun downloadImage(imageResId: Int) {
-        val bitmap = BitmapFactory.decodeResource(resources, imageResId)
-        val file = File(requireContext().getExternalFilesDir(null), "downloaded_image.jpg")
         try {
+            // Convert drawable to bitmap
+            val bitmap = BitmapFactory.decodeResource(resources, imageResId)
+
+            // Save bitmap to cache directory
+            val cachePath = File(requireContext().cacheDir, "images")
+            cachePath.mkdirs() // Buat folder jika belum ada
+            val file = File(cachePath, "shared_image.jpg")
             FileOutputStream(file).use { out ->
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
             }
-            Toast.makeText(requireContext(), "Image saved to ${file.absolutePath}", Toast.LENGTH_LONG).show()
+
+            // Create URI using FileProvider
+            val imageUri = FileProvider.getUriForFile(
+                requireContext(),
+                "${requireContext().packageName}.fileprovider",
+                file
+            )
+
+            // Buat Intent untuk berbagi gambar
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "image/*"
+                putExtra(Intent.EXTRA_STREAM, imageUri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+
+            // Tampilkan chooser
+            startActivity(Intent.createChooser(shareIntent, "Share Image"))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(requireContext(), "Failed to share image", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun downloadImage(imageResId: Int) {
+        try {
+            // Convert drawable to bitmap
+            val bitmap = BitmapFactory.decodeResource(resources, imageResId)
+
+            // Tentukan lokasi penyimpanan
+            val picturesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            val file = File(picturesDir, "downloaded_image.jpg")
+
+            // Simpan gambar ke file
+            FileOutputStream(file).use { out ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+            }
+
+            // Berikan notifikasi bahwa gambar berhasil diunduh
+            Toast.makeText(
+                requireContext(),
+                "Image saved to ${file.absolutePath}",
+                Toast.LENGTH_LONG
+            ).show()
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(requireContext(), "Failed to save image", Toast.LENGTH_SHORT).show()
